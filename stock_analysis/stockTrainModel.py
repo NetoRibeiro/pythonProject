@@ -1,6 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
 import pandas_datareader as web
 import datetime as dt
 
@@ -9,14 +7,15 @@ from tensorflow.keras.models import Sequential, load_model
 from tensorflow.keras.layers import Dense, Dropout, LSTM
 
 # Load Data
-company = 'FB'
+company = 'AAPL'
+data_files_related = company.lower()
 
 start = dt.datetime(2012, 1, 1)
 end = dt.datetime(2020, 1, 1)
 
 data = web.DataReader(company, 'yahoo', start, end)
 
-data.to_pickle('data_stored/data.pkl')
+data.to_pickle(f'data_stored/{data_files_related}_data.pkl')
 
 # Prepare Data
 scaler = MinMaxScaler(feature_range=(0, 1))
@@ -56,6 +55,6 @@ model.compile(optimizer='adam', loss='mean_squared_error')
 model.fit(x_train, y_train, epochs=25, batch_size=32)
 
 # save Model
-file_path = 'data_stored/model_Sequential.h5'
+file_path = f'data_stored/{data_files_related}_model_Sequential.h5'
 model.save(filepath=file_path, overwrite=True, include_optimizer=True,
            save_format=None, signatures=None, options=None, save_traces=True)
